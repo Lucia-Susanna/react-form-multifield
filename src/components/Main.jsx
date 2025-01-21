@@ -1,24 +1,63 @@
 import { useState } from "react"
 
+const categories = [
+  "Cuccioli",
+  "Cani anziani",
+  "Attività all'aperto",
+  "Stili di vita dei cani",
+  "Cani da lavoro"
+];
+
+const tags = [
+  { id: 1, tag: "Adozione" },
+  { id: 2, tag: "Addestramento" },
+  { id: 3, tag: "Cucciolo" },
+  { id: 4, tag: "Razze" },
+  { id: 5, tag: "Salute" }
+];
+
 const Main = () => {
 
-  const [articlesList, setArticlesList] = useState([])
-  const [newTitle, setNewTitle] = useState('')
-
-  const addArticle = () => {
-    event.preventDefault()
-    if (!newTitle) {
-      alert('Devi inserire un titolo')
-    } else {
-      setArticlesList([...articlesList, newTitle]);
-      setNewTitle('')
-    }
+  const initialFormData = {
+    title: "",
+    urlImg: "",
+    content: "",
+    category: "",
+    tags: [],
+    published: false
   }
 
-  const deleteArticle = (i, title) => {
-    console.log(i);
-    const newArticlesList = articlesList.filter((item, index) => i !== index)
-    setArticlesList(newArticlesList)
+  const [formData, setFormData] = useState(initialFormData)
+
+  const handlerField = (e) => {
+    let value = e.target.value
+
+    if (e.target.name === 'category') {
+      value = categories[e.target.value]
+    }
+
+    if (e.target.type === 'checkbox') {
+      value = e.target.checked
+    }
+
+    setFormData({
+      ...formData,
+      [e.target.name]: value
+    });
+  }
+
+  const handlerChangeTags = (e) => {
+    let { tags, ...others } = formData
+    if (tags.includes(e.target.value)) {
+      tags = tags.filter(tag => tag !== e.target.value)
+    } else {
+      tags = [...tags, e.target.value]
+    }
+
+    setFormData({
+      tags,
+      ...others
+    })
   }
 
   return (
@@ -30,10 +69,13 @@ const Main = () => {
             <div className="mb-4">
               <label htmlFor="title" className="form-label">Titolo:</label>
               <input
-                type="title"
+                type="text"
                 className="form-control"
                 placeholder="Inserisci il titolo dell'articolo"
                 id="title"
+                name="title"
+                value={formData.title}
+                onChange={handlerField}
               />
             </div>
             <div className="mb-4">
@@ -43,6 +85,9 @@ const Main = () => {
                 className="form-control"
                 placeholder="Inserisci l'URL dell' immagine"
                 id="image"
+                name="urlImg"
+                value={formData.urlImg}
+                onChange={handlerField}
               />
             </div>
             <div className="mb-4">
@@ -52,46 +97,45 @@ const Main = () => {
                 className="form-control"
                 rows="5"
                 placeholder="Inserisci il contenuto"
+                name="content"
+                value={formData.content}
+                onChange={handlerField}
               ></textarea>
             </div>
             <div className="mb-4">
               <select
                 className="form-select"
+                onChange={handlerField}
+                name="category"
+                defaultValue=""
               >
                 <option selected>Seleziona la categoria</option>
-                <option value="1">Sport</option>
-                <option value="2">Arte</option>
-                <option value="3">Animali</option>
-                <option value="4">Hobbies</option>
+                {categories.map((category, index) => (
+                  <option key={index} value={index}>{category}</option>
+                ))}
               </select>
             </div>
 
             <div className="mb-4">
               <label className="form-label">Tags:</label>
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
-                  Cani
-                </label>
-              </div>
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
-                  Football
-                </label>
-              </div>
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
-                  Tennis
-                </label>
-              </div>
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
-                  Gatti
-                </label>
-              </div>
+              {tags.map(item => (
+                <div key={item.id} className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value={item.tag}
+                    id={item.id}
+                    onChange={handlerChangeTags}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor={item.id}>
+                    {item.tag}
+                  </label>
+                </div>
+
+              ))}
+
             </div>
 
 
@@ -99,10 +143,14 @@ const Main = () => {
               <input
                 type="checkbox"
                 className="form-check-input"
-                id="publish" />
+                id="published"
+                name='published'
+                checked={formData.published}
+                onChange={handlerField}
+              />
               <label className="form-check-label" htmlFor="exampleCheck1">Pubblica</label>
             </div>
-            <button type="submit" className="btn btn-success">Submit</button>
+            <button type="submit" className="btn btn-success">Aggiungi articolo</button>
           </form>
         </div>
         {/* <table class="table table-striped">
@@ -118,7 +166,7 @@ const Main = () => {
           </thead>
           <tbody>
             <tr className="ro">
-              <th scope="row"><img src="https://placedog.net/100/100?random" alt="dog" /></th>
+              <th scope="row"><img src="https://placedog.net/100/100?random" />alt="dog" /></th>
               <td>cane</td>
               <td>Otto</td>
               <td>ciao</td>
