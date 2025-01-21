@@ -5,19 +5,17 @@
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-.container {
+/* .container {
   width: calc(100% / 3);
   margin: 50px auto;
-}
+} */
 
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+
+/* form {
   background-color: #F9F9FA;
   border: 1px solid #E0E0E2;
   padding: 30px;
-  border-radius: 20px;
 }
 
 input {
@@ -32,7 +30,7 @@ form button {
   border-radius: 5px;
   background-color: #4D64FF;
   color: #F9F9FA;
-
+  display: block;
 }
 
 ul li {
@@ -56,4 +54,4 @@ ul li button {
 
 ul li button:hover {
   color: rgb(183, 33, 33);
-}
+} */
