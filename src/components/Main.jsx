@@ -28,6 +28,7 @@ const Main = () => {
   }
 
   const [formData, setFormData] = useState(initialFormData)
+  const [articlesList, setArticlesList] = useState([])
 
   const handlerField = (e) => {
     let value = e.target.value
@@ -60,11 +61,25 @@ const Main = () => {
     })
   }
 
+  const handlerSubmit = (e) => {
+    e.preventDefault()
+    setArticlesList([
+      ...articlesList,
+      formData
+    ])
+
+    console.log(articlesList);
+
+  }
+
   return (
     <main>
       <div className="container my-5">
         <div className="card mx-auto p-4">
-          <form>
+          <form
+            onSubmit={handlerSubmit}
+
+          >
             <h4 className="my-3">Compila il form per aggiungere un articolo:</h4>
             <div className="mb-4">
               <label htmlFor="title" className="form-label">Titolo:</label>
@@ -153,7 +168,7 @@ const Main = () => {
             <button type="submit" className="btn btn-success">Aggiungi articolo</button>
           </form>
         </div>
-        {/* <table class="table table-striped">
+        <table class="table table-striped">
           <thead>
             <tr>
               <th scope="col">Immagine</th>
@@ -165,16 +180,20 @@ const Main = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="ro">
-              <th scope="row"><img src="https://placedog.net/100/100?random" />alt="dog" /></th>
-              <td>cane</td>
-              <td>Otto</td>
-              <td>ciao</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-            </tr>
+            {articlesList.map(article =>
+              <tr className="">
+                <th scope="row"><img src={article.img} alt={article.title} /></th>
+                <td>{article.title}</td>
+                <td>{article.content}</td>
+                <td>{article.tags}</td>
+                <td>{article.published}</td>
+                <td><i class="fa-solid fa-trash-can"></i></td>
+              </tr>
+            )}
+
+
           </tbody>
-        </table> */}
+        </table>
       </div>
 
     </main >
